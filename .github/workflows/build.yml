@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - master
-      - build
+    tags:
+      - "v*.*.*"
   pull_request:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -26,3 +27,8 @@ jobs:
         with:
           name: jarjar-command-1.1.1.jar
           path: jarjar-command/build/libs/jarjar-command-1.1.1.jar
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            jarjar-command/build/libs/jarjar-command-1.1.1.jar
