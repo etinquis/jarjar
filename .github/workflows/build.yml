@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+      - build
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: openjdk:12-alpine
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: ./gradlew jar
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jarjar-command-1.1.1.jar
+          path: jarjar-command/build/libs/jarjar-command-1.1.1.jar
